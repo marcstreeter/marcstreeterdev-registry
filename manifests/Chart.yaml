@@ -1,0 +1,6 @@
+apiVersion: v2
+name: marcstreeterdev-registry
+description: A Helm chart for MarcStreeter.dev Registry (Next.js component registry)
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
