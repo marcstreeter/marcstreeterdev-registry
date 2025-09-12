@@ -10,15 +10,6 @@ kubexec := "kubectl -n " + namespace + " exec deploy/" + deployment
 default:
     @just --list
 
-# Check if tilt is installed
-_check-tilt: _check-docker _check-kubectl
-    #!/usr/bin/env bash
-    if ! command -v tilt &> /dev/null; then
-        echo "Error: tilt is not installed. Please install tilt first."
-        echo "Visit: https://docs.tilt.dev/install.html"
-        exit 1
-    fi
-
 # Check if docker is installed
 _check-docker:
     #!/usr/bin/env bash
@@ -36,12 +27,27 @@ _check-kubectl:
         exit 1
     fi
 
+# Check if tilt is installed
+_check-tilt: _check-docker _check-kubectl
+    #!/usr/bin/env bash
+    if ! command -v tilt &> /dev/null; then
+        echo "Error: tilt is not installed. Please install tilt first."
+        echo "Visit: https://docs.tilt.dev/install.html"
+        exit 1
+    fi
+
 # Development setup
-setup: _check-tilt
+_setup-local:
     @echo "🔧 Setting up development environment..."
     @echo "Installing dependencies..."
-    pnpm install
+    npm install
     @echo "✅ Development setup complete!"
+
+# Local development (without Tilt)
+start-local: _setup-local
+    @echo "🚀 Starting local development server..."
+    @echo "Note: Use 'just start' for containerized development with Tilt"
+    npm run registry
 
 # Development with Tilt (recommended)
 start: _check-tilt
@@ -51,12 +57,6 @@ start: _check-tilt
     @echo "Press Ctrl+C to stop"
     tilt up -vvv --port 10352
 
-# Local development (without Tilt)
-start-local:
-    @echo "🚀 Starting local development server..."
-    @echo "Note: Use 'just start' for containerized development with Tilt"
-    pnpm run dev
-
 stop: _check-tilt
     @echo "🛑 Stopping development environment..."
     tilt down
@@ -65,23 +65,3 @@ stop: _check-tilt
 test: _check-tilt
     @echo "🧪 Running tests in the development container..."
     {{kubexec}} -- pnpm test
-
-# Linting and formatting with Tilt
-lint-check: _check-tilt
-    @echo "🔍 Running lint check"
-    {{kubexec}} -- pnpm run lint
-
-# Type checking with Tilt
-type-check: _check-tilt
-    @echo "🔍 Running type check..."
-    {{kubexec}} -- pnpm run type-check
-
-# Build the application
-build: _check-tilt
-    @echo "🔨 Building the application..."
-    {{kubexec}} -- pnpm run build
-
-# Registry build command
-registry-build: _check-tilt
-    @echo "🔨 Building registry components..."
-    {{kubexec}} -- pnpm run registry:build
