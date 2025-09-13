@@ -140,15 +140,6 @@ export default function ComponentsPage() {
   return (
     <div className="max-w-6xl mx-auto flex flex-col min-h-screen px-4 py-8 gap-8">
       <header className="flex flex-col gap-4">
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
-            <Link href="/" className="gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Home
-            </Link>
-          </Button>
-        </div>
-        
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -164,17 +155,9 @@ export default function ComponentsPage() {
         <div className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tight">UI Components</h1>
           <p className="text-muted-foreground text-lg">
-            A comprehensive collection of 46+ shadcn/ui components ready to copy and use in your projects.
+            Comprehensive collection of all components available in this registry.
           </p>
         </div>
-
-        <Alert>
-          <AlertTitle>Installation</AlertTitle>
-          <AlertDescription>
-            Use the copy buttons below to quickly install any component with the shadcn CLI.
-            Make sure you have configured your registry URL to point to this custom registry.
-          </AlertDescription>
-        </Alert>
       </header>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
